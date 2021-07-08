@@ -20,11 +20,13 @@ function get_item($db, $item_id){
     FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = ?
   ";
 
+  // プレースホルダにバインドする値の配列
+  $params = array($item_id);
   // SQL文を実行して取得した結果を返す
-  return fetch_query($db, $sql);
+  return fetch_query($db, $sql, $params);
 }
 
 // DBから全商品データを取得する関数
@@ -111,11 +113,13 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
         image,
         status
       )
-    VALUES('{$name}', {$price}, {$stock}, '{$filename}', {$status_value});
+    VALUES(?, ?, ?, ?, ?);
   ";
 
+  // プレースホルダにバインドする値の配列
+  $params = array($name, $price, $stock, $filename, $status_value);
   // SQL文実行の成否を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 // 商品の公開ステータスを変更する関数
@@ -125,14 +129,16 @@ function update_item_status($db, $item_id, $status){
     UPDATE
       items
     SET
-      status = {$status}
+      status = ?
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
   
+  // プレースホルダにバインドする値の配列
+  $params = array($status, $item_id);
   // SQL文実行の成否を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 // 商品の在庫数を変更する関数
@@ -142,14 +148,16 @@ function update_item_stock($db, $item_id, $stock){
     UPDATE
       items
     SET
-      stock = {$stock}
+      stock = ?
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
   
+  // プレースホルダにバインドする値の配列
+  $params = array($stock, $item_id);
   // SQL文実行の成否を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 // 商品に関するデータを全て削除する関数
@@ -184,12 +192,14 @@ function delete_item($db, $item_id){
     DELETE FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
   
+  // プレースホルダにバインドする値の配列
+  $params = array($item_id);
   // SQL文実行の成否を返す
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, $params);
 }
 
 
