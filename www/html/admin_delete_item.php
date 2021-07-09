@@ -11,6 +11,12 @@ require_once MODEL_PATH . 'item.php';
 // セッション開始
 session_start();
 
+// CSRFトークンが不正なら
+if(valid_csrf_token() !== true) {
+  // エラーメッセージを表示してスクリプトを終了
+  exit(h('エラーが発生しました'));
+}
+
 // ログインしていなければ
 if(is_logined() === false){
   // ログインページにリダイレクト
