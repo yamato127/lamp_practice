@@ -13,6 +13,9 @@ require_once MODEL_PATH . 'cart.php';
 // セッション開始
 session_start();
 
+// CSRFトークンの生成
+$csrf_token = get_csrf_token();
+
 // ログインしていなければ
 if(is_logined() === false){
   // ログインページにリダイレクト

@@ -11,6 +11,9 @@ require_once MODEL_PATH . 'item.php';
 // セッションを開始
 session_start();
 
+// CSRFトークンの生成
+$csrf_token = get_csrf_token();
+
 // ログインしていなれば
 if(is_logined() === false){
   // ログインページにリダイレクト

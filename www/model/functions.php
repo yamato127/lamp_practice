@@ -218,3 +218,28 @@ function h($str){
   return htmlspecialchars($str,ENT_QUOTES,'UTF-8');
 }
 
+// トークンの生成を行う関数
+function get_csrf_token(){
+  // ランダムな30文字の文字列を所得
+  $token = get_random_string(30);
+  // セッション変数にトークンを保存
+  set_session('csrf_token', $token);
+  // トークンを返す
+  return $token;
+}
+
+// トークンのチェックを行う関数
+function valid_csrf_token(){
+  // POSTで送られてきたトークンを取得
+  $post_token = get_post('csrf_token');
+  // セッションに保存されているトークンを取得
+  $session_token = get_session('csrf_token');
+  
+  // トークンが取得できていなければ
+  if($post_token === '') {
+    // falseを返す
+    return false;
+  }
+  // トークンが一致していればtrueを返す
+  return $post_token === $session_token;
+}

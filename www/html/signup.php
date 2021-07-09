@@ -7,6 +7,9 @@ require_once MODEL_PATH . 'functions.php';
 // セッション開始
 session_start();
 
+// CSRFトークンの生成
+$csrf_token = get_csrf_token();
+
 // 既にログインしていれば
 if(is_logined() === true){
   // ホームページにリダイレクト
