@@ -53,7 +53,7 @@ function login_as($db, $name, $password){
   // ユーザーデータを取得
   $user = get_user_by_name($db, $name);
   // ユーザーデータが取得できていない、またはパスワードが間違っていれば
-  if($user === false || $user['password'] !== $password){
+  if($user === false || password_verify($password, $user['password']) === false){
     // falseを返す
     return false;
   }
@@ -79,9 +79,12 @@ function regist_user($db, $name, $password, $password_confirmation) {
     // falseを返す
     return false;
   }
+
+  // パスワードのハッシュ化
+  $hash = password_hash($password, PASSWORD_DEFAULT);
   
   // DBにユーザーデータを追加し結果の成否を返す
-  return insert_user($db, $name, $password);
+  return insert_user($db, $name, $hash);
 }
 
 // ユーザーが管理者であるかチェックする関数
