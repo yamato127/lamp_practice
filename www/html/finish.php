@@ -9,6 +9,8 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 // cartデータに関する関数ファイルを読み込み
 require_once MODEL_PATH . 'cart.php';
+// orderデータに関する関数ファイルを読み込み
+require_once MODEL_PATH . 'order.php';
 
 // セッション開始
 session_start();
@@ -34,7 +36,7 @@ $user = get_login_user($db);
 $carts = get_user_carts($db, $user['user_id']);
 
 // 商品が正常に購入できなければ
-if(purchase_carts($db, $carts) === false){
+if(purchase_carts($db, $user['user_id'], $carts) === false){
   // エラーメッセージをセット
   set_error('商品が購入できませんでした。');
   // カートページにリダイレクト
