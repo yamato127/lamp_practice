@@ -135,20 +135,26 @@ function delete_cart($db, $cart_id){
 }
 
 // カート内の商品の購入処理を行う関数
-function purchase_carts($db, $carts){
+function purchase_carts($db, $user_id, $carts){
   // カート内の商品が購入できない状態であれば
   if(validate_cart_purchase($carts) === false){
     // falseを返す
     return false;
-  }
+  };
+
+  // 購入履歴を追加できなければ
+  if(insert_order($db, $user_id) === false){
+    // falseを返す
+    return false;
+  };
+
+  // 追加した購入履歴の注文番号を取得
+  $order_id = $db->lastInsertId();
+
   // カート内の商品データを順次参照
   foreach($carts as $cart){
-    // 商品の在庫数を正常に変更できなければ
-    if(update_item_stock(
-        $db, 
-        $cart['item_id'], 
-        $cart['stock'] - $cart['amount']
-      ) === false){
+    // 商品の購入処理が失敗したら
+    if(purchase_carts_transaction($db, $order_id, $cart) === false){
       // エラーメッセージをセット
       set_error($cart['name'] . 'の購入に失敗しました。');
     }
@@ -156,6 +162,24 @@ function purchase_carts($db, $carts){
   
   // カート内の全商品データを削除
   delete_user_carts($db, $carts[0]['user_id']);
+}
+
+// カート内の商品の購入処理を行う関数（トランザクション部分）
+function purchase_carts_transaction($db, $order_id, $cart){
+  // トランザクション開始
+  $db->beginTransaction();
+  // 商品の在庫数を変更して購入明細を追加できたら
+  if(update_item_stock($db, $cart['item_id'], $cart['stock'] - $cart['amount'])
+    && insert_order_detail($db, $order_id, $cart['item_id'], $cart['price'], $cart['amount'])){
+    // コミット処理
+    $db->commit();
+    // trueを返す
+    return true;
+  }
+  // ロールバック処理
+  $db->rollback();
+  // falseを返す
+  return false;
 }
 
 // カート内の全商品データを削除する関数
