@@ -1,0 +1,9 @@
+.order {
+  list-style-type: none;
+  margin-top: 1rem;
+  padding-left: 0;
+}
+
+.order li:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
