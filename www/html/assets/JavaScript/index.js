@@ -1,0 +1,1 @@
+document.getElementById("selected_sort").onchange = function(){document.sort_form.submit();}

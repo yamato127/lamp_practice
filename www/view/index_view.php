@@ -17,7 +17,13 @@ header("X-FRAME-OPTIONS: DENY");
   <div class="container">
     <h1>商品一覧</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
-
+    <form name="sort_form" action="index.php" method="get">
+      <select class="form-control" name="selected_sort" id="selected_sort">
+        <?php foreach(array_keys(SORT_TYPES) as $sort){ ?>
+          <option value="<?php print(h($sort)); ?>"<?php if($sort === $selected_sort) print(h(' selected')); ?>><?php print(h($sort)); ?></option>
+        <?php } ?>
+      </select>
+    </form>
     <div class="card-deck">
       <div class="row">
       <?php foreach($items as $item){ ?>
@@ -47,6 +53,6 @@ header("X-FRAME-OPTIONS: DENY");
       </div>
     </div>
   </div>
-  
+  <script type="text/javascript" src="<?php print(h(SCRIPT_PATH . 'index.js')); ?>"></script>
 </body>
 </html>

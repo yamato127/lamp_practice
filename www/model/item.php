@@ -30,9 +30,9 @@ function get_item($db, $item_id){
 }
 
 // DBから全商品データを取得する関数
-function get_items($db, $is_open = false){
+function get_items($db, $sort_sql = '', $is_open = false){
   // SQL文を作成
-  $sql = '
+  $sql = "
     SELECT
       item_id, 
       name,
@@ -42,14 +42,16 @@ function get_items($db, $is_open = false){
       status
     FROM
       items
-  ';
+  ";
   // 引数にtrueが指定されていれば
   if($is_open === true){
     // ステータスが公開の商品を条件に追加
-    $sql .= '
+    $sql .= "
       WHERE status = 1
-    ';
+    ";
   }
+  // 商品の表示順序を指定
+  $sql .= $sort_sql;
 
   // SQL文を実行して取得した結果を返す
   return fetch_all_query($db, $sql);
@@ -62,9 +64,18 @@ function get_all_items($db){
 }
 
 // DBから公開されている全商品データを取得する関数
-function get_open_items($db){
+function get_open_items($db, $sort){
+  // SORT_TYPESのキーに$sortが存在すれば
+  if(array_key_exists($sort, SORT_TYPES)){
+    // 対応する値を取得
+    $sort_sql = SORT_TYPES[$sort];
+  }else{
+    // 配列SORT_TYPESの先頭の要素の値を取得
+    $sort_sql = array_values(SORT_TYPES)[0];
+  }
+
   // DBから取得したデータを返す
-  return get_items($db, true);
+  return get_items($db, $sort_sql, true);
 }
 
 // 商品登録を行う関数

@@ -6,6 +6,7 @@ define('VIEW_PATH', $_SERVER['DOCUMENT_ROOT'] . '/../view/');
 
 define('IMAGE_PATH', '/assets/images/');
 define('STYLESHEET_PATH', '/assets/css/');
+define('SCRIPT_PATH', '/assets/JavaScript/');
 define('IMAGE_DIR', $_SERVER['DOCUMENT_ROOT'] . '/assets/images/' );
 
 define('DB_HOST', 'mysql');
@@ -49,4 +50,10 @@ define('PERMITTED_ITEM_STATUSES', array(
 define('PERMITTED_IMAGE_TYPES', array(
   IMAGETYPE_JPEG => 'jpg',
   IMAGETYPE_PNG => 'png',
+));
+
+define('SORT_TYPES', array(
+  '新着順' => 'ORDER BY created DESC',
+  '価格の安い順' => 'ORDER BY price ASC',
+  '価格の高い順' => 'ORDER BY price DESC'
 ));
